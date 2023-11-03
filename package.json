@@ -1,0 +1,19 @@
+{
+  "name": "grammy_tests",
+  "version": "1.0.0",
+  "description": "> **Warning**: This is the re-write branch and it IS unstable. If you want to use a little-broken-and-old version of this library, switch to the main branch.",
+  "main": "index.js",
+  "dependencies": {
+    "grammy": "^1.19.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "dev": "ts-node example.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

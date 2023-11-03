@@ -239,6 +239,7 @@ export class PrivateChat<C extends Context> {
       | Types.MessageId["message_id"]
       | NonNullable<Types.Message["reply_to_message"]>;
     entities?: Types.MessageEntity[];
+    callback_query?: Types.CallbackQuery
   }) {
     if (!this.#env.userCan(this.user.id, this.chat.id, "can_send_messages")) {
       throw new Error("User have no permission to send message to the chat.");
@@ -255,8 +256,8 @@ export class PrivateChat<C extends Context> {
         : options?.replyTo,
     };
     const update: Omit<Types.Update, "update_id"> = this.chat.type === "channel"
-      ? { channel_post: { ...common, chat: this.chat } }
-      : { message: { ...common, chat: this.chat, from: this.user } };
+      ? { channel_post: { ...common, chat: this.chat }, callback_query: options?.callback_query }
+      : { message: { ...common, chat: this.chat, from: this.user }, callback_query: options?.callback_query };
     const validated = this.#env.validateUpdate(update);
     this.updates.push(validated);
     return this.#env.sendUpdate(validated);
@@ -272,5 +273,16 @@ export class PrivateChat<C extends Context> {
         length: cmd.length + 1,
       }],
     });
+  }
+
+  callbackQuery(data: string) {
+    this.sendMessage("", {
+      callback_query: {
+        chat_instance: 'this.chat',
+        from: this.user,
+        id: this.messageId.toString(),
+        data
+      }
+    })
   }
 }

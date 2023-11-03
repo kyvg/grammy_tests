@@ -7,4 +7,4 @@ export * from "./helpers.ts";
 export * from "./errors.ts";
 export * from "./types.ts";
 export * from "./constants.ts";
-export * from "./methods/mod.ts";
+export * from "./methods/index.ts";

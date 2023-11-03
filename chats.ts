@@ -11,7 +11,7 @@ import { PrivateChat, PrivateChatDetails } from "./private.ts";
 import { GroupChat, GroupChatDetails } from "./group.ts";
 import { SupergroupChat, SupergroupChatDetails } from "./supergroup.ts";
 import { ChannelChat, ChannelChatDetails } from "./channel.ts";
-import { bakeHandlers } from "./methods/mod.ts";
+import { bakeHandlers } from "./methods/index.ts";
 import * as CONSTANTS from "./constants.ts";
 import { isChatAdministratorRight, isChatPermission, rand } from "./helpers.ts";
 
@@ -113,6 +113,10 @@ export class Chats<C extends Context> {
     if (chat === undefined) return { status: "chat-not-found" };
     if (chat.type === "private") {
       this.d("No need for checking if user is a member of private chat");
+      return {
+        status: "member",
+        user: chat.user
+      }
       return { status: "chat-not-found" }; // Yes, thats how Bot API works.
     }
     return chat.getChatMember(userId);
@@ -127,7 +131,6 @@ export class Chats<C extends Context> {
       | keyof Types.ChatAdministratorRights,
   ): boolean {
     const member = this.getChatMember(userId, chatId);
-
     if (
       member.status === "chat-not-found" ||
       member.status === "not-found" ||
